@@ -38,7 +38,10 @@ def extract_information(mycursor):
     cur = mycursor.cursor()
     cur.execute("select Titel from folge")
     titre = cur.fetchall()
+
     for x in titre:
+        x = replacement(x)
+
         info.append(x)
     return info
 
@@ -49,8 +52,8 @@ def recherche(driver,info):
         actionChain = ActionChains(driver)
         try:
             search = driver.find_element_by_class_name('gLFyf')
-            buffer = info[x][0].replace(" ", "")
-            motcle = u"tatort"+ " "  + " " "dvd"+ buffer
+            buffer = info[x].replace(' ','')
+            motcle = u"tatort"+ " "  + " " "dvd" + ' ' +buffer
 
             search.send_keys(motcle)
             search.send_keys(Keys.RETURN)
@@ -78,25 +81,22 @@ def recherche(driver,info):
 
 
 def click_save(motcle,driver):
-    for x in range(7):
+    for x in range(8):
         pyautogui.press("down")
     pyautogui.press("enter")
     time.sleep(2)
     pyautogui.press("backspace")
-    new_motcle = replacement(motcle)
-    pyautogui.typewrite(new_motcle)
+
+    pyautogui.write(motcle)
     pyautogui.press("enter")
     time.sleep(2)
     #element = WebDriverWait(driver,20).until(EC.presence_of_element_located((By.XPATH,'//div[@class="isv-r"]')))
 def replacement(motcle):
-    if 'ä' in motcle:
-        motcle.replace('ä','ae')
-    if 'ö' in motcle:
-        motcle.replace('ö','oe')
-    if 'ü' in motcle:
-        motcle.replace('ü','ue')
-    if 'ß' in motcle:
-        motcle.replace('ß','ss')
+    motcle = ''.join(motcle)
+    motcle= motcle.replace("ä","ae")
+    motcle = motcle.replace("ö","oe")
+    motcle = motcle.replace("ü","ue")
+    motcle = motcle.replace("ß","ss")
     return motcle
 if __name__ == '__main__':
 
